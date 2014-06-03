@@ -4,7 +4,7 @@ import "testing"
 
 func TestContructor(t *testing.T) {
 	text := construct()
-	if (text != ColoredText{color: 39, background: 49, style: 0}) { t.Error() }
+	if (text != ColoredText{color: 0, background: 49, style: -1}) { t.Error() }
 }
 
 func TestSetContent(t *testing.T) {
@@ -35,23 +35,83 @@ func TestSetStyle(t *testing.T) {
 	if (text1.style != 1) { t.Error() }
 }
 
+// Foreground Colors
+
 func TestRed(t *testing.T) {
-	text := Red("Hello")
-	if (text.content != "Hello") { t.Errorf("text.content is '%s'", text.content) }
-	if (text.color != 31) { t.Errorf("text.color is '%d'", text.color) }
+	text := Red("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 31) { t.Error() }
 }
+
+func TestGreen(t *testing.T) {
+	text := Green("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 32) { t.Error() }
+}
+func TestYellow(t *testing.T) {
+	text := Yellow("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 33) { t.Error() }
+}
+func TestBlue(t *testing.T) {
+	text := Blue("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 34) { t.Error() }
+}
+func TestMagenta(t *testing.T) {
+	text := Magenta("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 35) { t.Error() }
+}
+func TestCyan(t *testing.T) {
+	text := Cyan("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 36) { t.Error() }
+}
+func TestWhite(t *testing.T) {
+	text := White("color test")
+	if (text.content != "color test") { t.Error() }
+	if (text.color != 37) { t.Error() }
+}
+
+// Background Colors
 
 func TestOnRed(t *testing.T) {
-	text := Red("Hello").OnRed()
-	if (text.background != 41) { t.Errorf("text.background is '%d'", text.background) }
+	if (Red("Hello").OnRed().background != 41) { t.Error() }
 }
+func TestOnGreen(t *testing.T) {
+	if (Red("Hello").OnGreen().background != 42) { t.Error() }
+}
+func TestOnYellow(t *testing.T) {
+	if (Red("Hello").OnYellow().background != 43) { t.Error() }
+}
+func TestOnBlue(t *testing.T) {
+	if (Red("Hello").OnBlue().background != 44) { t.Error() }
+}
+func TestOnMagenta(t *testing.T) {
+	if (Red("Hello").OnMagenta().background != 45) { t.Error() }
+}
+func TestOnCyan(t *testing.T) {
+	if (Red("Hello").OnCyan().background != 46) { t.Error() }
+}
+func TestOnWhite(t *testing.T) {
+	if (Red("Hello").OnWhite().background != 47) { t.Error() }
+}
+
+// Styles
 
 func TestBold(t *testing.T) {
-	text := Red("Hello").Bold()
-	if (text.style != 1) { t.Error() }
+	if (Red("Hello").Bold().style != 1) { t.Error() }
 }
 
-func TestRaw(t *testing.T) {
+// Raw
+
+func TestRawAllSet(t *testing.T) {
 	text := Red("Hello").OnRed().Bold().Raw()
 	if (text != "\033[31;41;1mHello") { t.Error() }
+}
+
+func TestRawColorAndBackgroundSet(t *testing.T) {
+	text := Red("Hello").OnRed().Raw()
+	if (text != "\033[31;41mHello") { t.Error() }
 }

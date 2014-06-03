@@ -4,7 +4,6 @@ import "fmt"
 
 const (
 	resetCode = "\033[0m"
-	baseCode = "\033[%d;%d;%dm%s"
 )
 
 var foregroundColors = map[int]int{
@@ -16,7 +15,7 @@ var foregroundColors = map[int]int{
 	'm': 35, // Magenta
 	'c': 36, // Cyan
 	'w': 37, // White
-	0  : 39, // Default	
+	'd': 39, // Default	
 }
 
 var backgroundColors = map[int]int{
@@ -28,11 +27,11 @@ var backgroundColors = map[int]int{
 	'm': 45, // Magenta
 	'c': 46, // Cyan
 	'w': 47, // White
-	0  : 49, // Default
+	'd': 49, // Default
 }
 
 var styles = map[int]int{
-	0  : 0, // Default
+	'd': 0, // Default
 	'!': 1, // Bold
 	'.': 2, // Dim
 	'/': 3, // Italic
@@ -52,7 +51,7 @@ type ColoredText struct {
 
 func construct() ColoredText {
 	// return ColoredText{color: foregroundColors[0], background: backgroundColors[0], style: styles[0] }
-	return ColoredText{color: foregroundColors[0], background: backgroundColors[0], style: styles[0] }
+	return ColoredText{color: 0, background: backgroundColors['d'], style: -1 }
 }
 
 func (text *ColoredText) setContent(content string) *ColoredText {
@@ -76,14 +75,54 @@ func (text *ColoredText) setStyle(styleCode int) *ColoredText {
 }
 
 // Foreground Colors
-func Red(content string) *ColoredText {
+func buildAndSetColor(colorCode int) *ColoredText {
 	text := construct()
-	return text.setContent(content).setColor('r')
+	return text.setColor(colorCode)
+}
+
+func Red(content string) *ColoredText {
+	return buildAndSetColor('r').setContent(content)
+}
+func Green(content string) *ColoredText {
+	return buildAndSetColor('g').setContent(content)
+}
+func Yellow(content string) *ColoredText {
+	return buildAndSetColor('y').setContent(content)
+}
+func Blue(content string) *ColoredText {
+	return buildAndSetColor('b').setContent(content)
+}
+func Magenta(content string) *ColoredText {
+	return buildAndSetColor('m').setContent(content)
+}
+func Cyan(content string) *ColoredText {
+	return buildAndSetColor('c').setContent(content)
+}
+func White(content string) *ColoredText {
+	return buildAndSetColor('w').setContent(content)
 }
 
 // Background Colors
 func (text *ColoredText) OnRed() *ColoredText {
 	return text.setBackground('r')
+}
+func (text *ColoredText) OnGreen() *ColoredText {
+	return text.setBackground('g')
+}
+func (text *ColoredText) OnYellow() *ColoredText {
+	return text.setBackground('y')
+}
+func (text *ColoredText) OnBlue() *ColoredText {
+	return text.setBackground('b')
+}
+func (text *ColoredText) OnMagenta() *ColoredText {
+	return text.setBackground('m')
+}
+func (text *ColoredText) OnCyan() *ColoredText {
+	return text.setBackground('c')
+}
+func (text *ColoredText) OnWhite() *ColoredText {
+	return text.setBackground('w')
 }
 
 // Styles
@@ -93,5 +132,9 @@ func (text *ColoredText) Bold() *ColoredText {
 
 // Output
 func (text *ColoredText) Raw() string {
-	return fmt.Sprintf("\033[%d;%d;%dm%s", text.color, text.background, text.style, text.content)
+	if (text.style == -1) {
+		return fmt.Sprintf("\033[%d;%dm%s", text.color, text.background, text.content)
+	} else {
+		return fmt.Sprintf("\033[%d;%d;%dm%s", text.color, text.background, text.style, text.content)
+	}
 }
