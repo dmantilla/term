@@ -1,9 +1,9 @@
-package fmtc
+package term
 
 import "fmt"
 
 const (
-	resetCode = "\033[0m"
+	kResetCode = "\033[0m"
 )
 
 var foregroundColors = map[int]int{
@@ -75,11 +75,15 @@ func (text *ColoredText) setStyle(styleCode int) *ColoredText {
 }
 
 // Foreground Colors
+
 func buildAndSetColor(colorCode int) *ColoredText {
 	text := construct()
 	return text.setColor(colorCode)
 }
 
+func Black(content string) *ColoredText {
+	return buildAndSetColor('k').setContent(content)
+}
 func Red(content string) *ColoredText {
 	return buildAndSetColor('r').setContent(content)
 }
@@ -101,8 +105,15 @@ func Cyan(content string) *ColoredText {
 func White(content string) *ColoredText {
 	return buildAndSetColor('w').setContent(content)
 }
+func Default(content string) *ColoredText {
+	return buildAndSetColor('d').setContent(content)
+}
 
 // Background Colors
+
+func (text *ColoredText) OnBlack() *ColoredText {
+	return text.setBackground('k')
+}
 func (text *ColoredText) OnRed() *ColoredText {
 	return text.setBackground('r')
 }
@@ -129,12 +140,41 @@ func (text *ColoredText) OnWhite() *ColoredText {
 func (text *ColoredText) Bold() *ColoredText {
 	return text.setStyle('!')
 }
+func (text *ColoredText) Dim() *ColoredText {
+	return text.setStyle('.')
+}
+func (text *ColoredText) Italics() *ColoredText {
+	return text.setStyle('/')
+}
+func (text *ColoredText) Underlined() *ColoredText {
+	return text.setStyle('_')
+}
+func (text *ColoredText) Blinking() *ColoredText {
+	return text.setStyle('^')
+}
+func (text *ColoredText) FastBlinking() *ColoredText {
+	return text.setStyle('&')
+}
+func (text *ColoredText) Inverted() *ColoredText {
+	return text.setStyle('?')
+}
+func (text *ColoredText) Hidden() *ColoredText {
+	return text.setStyle('-')
+}
 
 // Output
 func (text *ColoredText) Raw() string {
 	if (text.style == -1) {
-		return fmt.Sprintf("\033[%d;%dm%s", text.color, text.background, text.content)
+		return fmt.Sprintf("\033[%d;%dm%s%s", text.color, text.background, text.content, kResetCode)
 	} else {
-		return fmt.Sprintf("\033[%d;%d;%dm%s", text.color, text.background, text.style, text.content)
+		return fmt.Sprintf("\033[%d;%d;%dm%s%s", text.color, text.background, text.style, text.content, kResetCode)
 	}
+}
+
+func (text *ColoredText) Print() {
+	fmt.Print(text.Raw())
+}
+
+func (text *ColoredText) Println() {
+	fmt.Println(text.Raw())
 }
