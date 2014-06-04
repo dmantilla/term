@@ -8,16 +8,22 @@ Simple package to print text on the console with ANSI colors and styles.
 
 ## Usage
 
-    term.Blue("Blue on White Blinking").OnWhite().Blinking().Println()
-	
-    term.Green("Green on Black Underlined").OnBlack().Underlined().Print()
-    term.Yellow(" and Yellow text").Println()
-	
-    fmt.Println(term.White("White on blue").OnBlue().Raw())
-	
-    fmt.Println(term.Default("Default Text").Raw())
-	
-    fmt.Println(term.Default("Default text on Red").OnRed().Raw())
-	
-    fmt.Println(term.Yellow("Yellow on Cyan Underlined").OnCyan().Underlined().Raw())
-	
+    package main
+    
+    import (
+    	"github.com/dmantilla/term"
+    	"fmt"
+    )
+    
+    func main() {
+    	term.Blue("Blue on White Blinking").OnWhite().Blinking().Println()
+    	
+    	term.Green("Green on Black Underlined").OnBlack().Underlined().Print()
+    	term.Yellow(" and Yellow text").Println()
+    	
+    	fmt.Println(term.White("White on blue").OnBlue().Raw())
+    	fmt.Println(term.Default("Default Text").Raw())
+    	fmt.Println(term.Default("Default text on Red").OnRed().Raw())
+    	fmt.Println(term.Yellow("Yellow on Cyan Underlined").OnCyan().Underlined().Raw())
+    	
+    }    
